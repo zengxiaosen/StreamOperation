@@ -1,0 +1,1 @@
+/usr/bin/c++   -g   CMakeFiles/MaxSubArraySum.dir/main.cpp.o  -o MaxSubArraySum 
