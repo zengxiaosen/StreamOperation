@@ -1,0 +1,43 @@
+<html>
+<head>
+  <title>Welcome</title></head>
+<body>
+  <h1>gRPC-json gateway remote call experimental:</h1>
+  <form action="/contact" method="post">
+    method:<br>
+    <input type="text" name="method" value="CreateNewUser" />
+    <br>
+    payload: <br>
+    <textarea name="message" value="" style="width:500px;height:200px"></textarea>
+    <br>examples:
+     <br>  {"user_info": {"phone_key": "18911861123", "name": "Xu Cheng"}, "uid": "1234567"}
+     <br>
+    <input type="submit" value="Invoke" />
+  </form>
+
+  <form action="/contact" method="post">
+    method:<br>
+    <input type="text" name="method" value="GetUserContacts" />
+    <br>
+    payload: <br>
+    <textarea name="message" value="" style="width:500px;height:200px"></textarea>
+    <br>examples:
+     <br>  {"uid": "AB123456"}
+     <br>
+    <input type="submit" value="Invoke" />
+  </form>
+
+  <form action="/contact" method="post">
+    method:<br>
+    <input type="text" name="method" value="UploadContacts" />
+    <br>
+    payload: <br>
+    <textarea name="message" value="" style="width:500px;height:200px"></textarea>
+    <br>examples:
+     <br>  {"contacts": {"contacts": [{"phone_key": "18511069719", "name": "zhihan"}, {"phone_key": "13682357042", "name": "daxing"}, {"phone_key": "13816766434", "name": "majia"}, {"phone_key": "18962657032", "name": "helen"}]}, "uid": "AB123456"}
+     <br>
+    <input type="submit" value="Invoke" />
+  </form>
+
+ </body>
+</html>

@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package sstable;
+
+// This models a simple SSTable, which could not be called 'sstable' in strict
+// definition. It is basically a persistent indexed key-value mapping. (So
+// it does not provide iterator for the sorted keys.)
+// The current implementation is based on hash_key value and use the disk file
+// as the index. So it does not guarantee that the key is sorted. The only
+// functionality in this table is to look up very quickly from the disk file.
+// The index is pretty huge in current implementation as well. So we had better
+// to store BLOB (i.e. big size) values.
+// The experimentals show:
+// For a 300M indexed file, its qps could be reached 10000/s.
+//
+// Also 
+// The future implementation should use rb_tree or other AVL (and multiple level of
+// the tree index) to store the keys, which will yield both the benefits of the
+// sorted key and do quick lookup functions.
+//
+
+// The basic item (unit) in the table.
+message SSTableDataItem {
+   bytes key = 1;
+   bytes data = 2;
+};
+
+// Each block contains several data itmes of the same hash_key.
+message SSTableBlock {
+  enum Algorithm {
+    // Flat string
+    FLAT_STRING = 0;
+    // Zippy
+    ZIPPY_COMPRESSION = 1;
+    // undefined yet
+    UNDEFINED = 2;
+  }
+   Algorithm algorithm = 1;
+  repeated SSTableDataItem data = 2;
+};
+
+// Index from key to the offset in the disk file.
+message SSTableIndex {
+   int64 key_range = 1;
+   int64 offset = 2;
+};
+
+// The basic meta data in the disk file to store the index.
+message SSTableMetadata {
+  repeated SSTableIndex index = 1;
+};

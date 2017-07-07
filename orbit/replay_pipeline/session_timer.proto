@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package orbit;
+
+enum EventType {
+  NONE = 0;
+  ENTER = 1;
+  START = 2;
+  STOP = 3;
+  LEAVE = 4;
+};
+
+message UserInfo{
+  string user_id = 1;
+  string user_name = 2;
+  string origin_user_id = 3;
+}
+
+enum StreamType {
+  NORMAL = 0;
+  TEACHER = 1;
+  STUDENT = 2;
+};
+
+message StreamEvent {
+  EventType event_type = 1;
+  int64 event_time = 2;//Start from 0ms
+}
+
+message StreamItem {
+  uint32 stream_id = 1;
+  StreamType stream_type = 2;
+  repeated StreamEvent stream_events = 3;
+  UserInfo user_info = 4;
+}
+
+message SessionTimer {
+  uint32 session_id = 1;
+  int64 start_time = 2;
+  repeated StreamItem stream_items = 3;
+}

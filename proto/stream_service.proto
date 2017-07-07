@@ -1,0 +1,269 @@
+syntax = "proto3";
+
+package olive;
+
+// The media pipeline service definition.
+service StreamService {
+  rpc CreateSession (CreateSessionRequest)
+     returns (CreateSessionResponse) {}
+  rpc CloseSession (CloseSessionRequest)
+     returns (CloseSessionResponse) {}
+  rpc CreateStream (CreateStreamRequest)
+     returns (CreateStreamResponse) {}
+  rpc CloseStream (CloseStreamRequest)
+     returns (CloseStreamResponse) {}
+  rpc SendSessionMessage (SendSessionMessageRequest)
+     returns (SendSessionMessageResponse) {}
+  rpc RecvSessionMessage (RecvSessionMessageRequest)
+     returns (RecvSessionMessageResponse) {}
+}
+
+// The request message
+message CreateSessionRequest {
+  enum SessionCreationType {
+    VIDEO_BRIDGE = 0;
+    VIDEO_MIXER_BRIDGE = 1;
+    AUDIO_MIXER_BRIDGE = 2;
+    VIDEO_LIVE_BRIDGE = 3;
+    VIDEO_DISPATCHER = 4;
+    ORBIT_CLASSROOM = 5;
+  };
+  // Default is VIDEO_BRIDGE
+  SessionCreationType type = 1;
+  // rtmp location for VIDEO_LIVE_BRIDGE
+  string rtmp_location = 2;
+  // should capture the RTP data into persistent storage
+  bool capture_data = 3;
+}
+
+// The response message containing the greetings
+message CreateSessionResponse {
+  enum SessionCreationStatus {
+    OK = 0;
+    ERROR = 1;
+  };
+  string error_message = 3;
+
+  SessionCreationStatus status = 1;
+  int32 session_id = 2;
+}
+
+message CloseSessionRequest {
+  int32 session_id = 1;
+}
+
+message CloseSessionResponse {
+  int32 session_id = 1;
+  enum OperationStatus {
+    OK = 0;
+    ERROR = 1;
+  };
+  string error_message = 2;
+}
+
+message RelayServerInfo {
+  string turn_server = 1;
+  int32  port = 2;
+  string username = 3;
+  string credential =4;
+}
+
+enum VideoEncoding {
+  VP8  = 0;
+  H264 = 1;
+  VP9  = 2;
+};
+
+message CreateStreamOption {
+  bool use_relay = 1;
+  RelayServerInfo relay_server_info = 2;
+  int32 target_bandwidth = 3;
+  int32 min_encoding_bitrate = 5;
+
+  enum StreamRoleType {
+    ORBIT_PRESENTER = 0;
+    ORBIT_AUDIENCE = 1;
+    // Only in ORBIT_CLASSROOM Room
+    ORBIT_TEACHER = 2;
+    ORBIT_STUDENT = 3;
+  };
+  StreamRoleType role_type = 4;
+
+  VideoEncoding video_encoding = 6;
+}
+
+message CreateStreamRequest {
+  int32 session_id = 1;  
+  enum SessionStreamType {
+    // Only in VIDEO_DISPATCHER Room
+    VIDEO_DISPATCHER_PUBLISHER = 0;
+    VIDEO_DISPATCHER_SUBSCRIBER = 1;
+  };
+  CreateStreamOption option = 4;
+}
+
+// The response message containing the greetings
+message CreateStreamResponse {
+  enum StreamCreationStatus {
+    OK = 0;
+    ERROR = 1;
+  };
+  string error_message = 4;
+
+  StreamCreationStatus status = 1;
+  int32 session_id = 2;
+  int32 stream_id = 3;
+}
+
+message CloseStreamRequest {
+  int32 session_id = 1;
+  int32 stream_id = 2;
+}
+
+message CloseStreamResponse {
+  int32 session_id = 1;
+  int32 stream_id = 2;
+  enum OperationStatus {
+    OK = 0;
+    ERROR = 1;
+  };
+  OperationStatus status = 3;
+  string error_message = 4;
+}
+
+enum MessageType {
+  SDP_OFFER = 0;
+  ICE_CANDIDATE = 1;
+  MESSAGE = 2;
+  MUTE = 3;
+  RAISE_HAND = 4;
+  STREAM_INFO = 5;
+  CONNECT_STATUS = 6;
+  SET_PUBLISHER = 7;
+  PUBLISH_STREAMS = 8;
+  GET_STREAM_VIDEO_MAP = 9;
+  PROBE_NET = 10;
+}
+
+message SendSessionMessageRequest {
+  int32 session_id = 1;
+  int32 stream_id = 2;
+  MessageType type = 3;
+  string sdp_offer = 4;
+  IceCandidate candidate = 5;
+  string message = 6;
+  MuteStreams mute_streams = 7;
+  PublishStreams publish_streams = 8;
+}
+
+//Mute message request
+message MuteStreams {
+  repeated int32 stream_ids = 1 [packed=true];
+  bool mute = 2;
+}
+
+//Publish streams message request
+message PublishStreams {
+  repeated int32 stream_ids = 1 [packed=true];
+  bool published = 2;
+}
+
+message IceCandidate {
+  string ice_candidate = 1;
+  string sdp_mid = 2;
+  int32 sdp_m_line_index = 3;
+}
+
+enum MessageResponseType {
+  SDP_ANSWER = 0;
+  ICE_CANDIDATE_ANSWER = 1;
+  MESSAGE_ANSWER = 2;
+  MUTE_ANSWER = 3;
+  STREAM_INFO_ANSWER = 4;
+  CONNECT_STATUS_ANSWER = 6;
+  SET_PUBLISHER_ANSWER = 7;
+  PUBLISH_STREAMS_ANSWER = 8;
+  GET_STREAM_VIDEO_MAP_ANSWER = 9;
+  PROBE_NET_ANSWER = 10;
+}
+
+// The probe net result
+message ProbeNetTestResult {
+  enum NetworkStatusProbeResult {
+    GREAT = 0;
+    GOOD = 1;
+    NOT_GOOD = 2;
+    BAD = 3;
+    VERY_BAD = 4;
+    CANT_CONNECT = 5;
+  };
+  NetworkStatusProbeResult status = 1;
+  bool has_video = 2;
+  bool has_audio = 3;
+  int32  network_speed = 4; // unit is bps
+}
+
+// The current stream_id with the corresponding video_id and video_label
+// in the SSRC section of SDP.
+message StreamVideoMap {
+  int32 stream_id = 1;
+  int32 video_id = 2;
+  string mslabel = 3;
+}
+
+// Get the stream and the video mapping
+message StreamVideoMapResponse {
+  repeated StreamVideoMap stream_video_maps = 1;
+}
+
+message SendSessionMessageResponse {
+  int32 session_id = 1;
+  int32 stream_id = 2;
+  // Status and error message
+  enum OperationStatus {
+    OK = 0;
+    ERROR = 1;
+  };
+  OperationStatus status = 3;
+  string error_message = 7;
+
+  MessageResponseType type = 4;
+  string sdp_answer = 5;
+  string message_answer = 6;
+
+  StreamVideoMapResponse stream_video_map = 8;
+  ProbeNetTestResult probe_net_result = 9;
+}
+
+message RecvSessionMessageRequest {
+  int32 session_id = 1;
+  int32 stream_id = 2;
+  MessageType type = 3;
+}
+
+message ConnectStatus {
+  int32 stream_id = 1;
+  int32 status = 2;
+  int32 rtt = 3;
+  int32 targetbitrate = 4;
+  int32 fractionlost = 5;
+}
+
+message RecvSessionMessageResponse {
+  int32 session_id = 1;
+  int32 stream_id = 2;
+  MessageResponseType type = 3;
+  string sdp_offer = 4;
+  repeated IceCandidate ice_candidate = 5;
+  string message = 6;
+
+  // Status and error messages
+  enum OperationStatus {
+    OK = 0;
+    ERROR = 1;
+  };
+  OperationStatus status = 7;
+  string error_message = 9;
+
+  repeated ConnectStatus connect_status = 8;
+}

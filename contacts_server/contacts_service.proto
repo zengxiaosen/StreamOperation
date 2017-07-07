@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package orangelab;
+
+import "stream_service/contacts_server/contacts_storage.proto";
+
+// Defines the service interface.
+service ContactsService {
+  rpc CreateNewUser (CreateNewUserRequest)
+     returns (CreateNewUserResponse) {}
+  rpc GetUserContacts (GetUserContactsRequest)
+     returns (GetUserContactsResponse) {}
+  rpc UploadContacts (UploadContactsRequest)
+     returns (UploadContactsResponse) {}
+}
+
+/**
+ * CreateNewUser method
+ */
+message CreateNewUserRequest {
+  string uid = 1;
+  ContactInfo user_info = 2;
+}
+
+message CreateNewUserResponse {
+  string code = 1;
+  string message = 2;
+  ReverseContacts friends = 3;
+}
+
+/**
+ * GetUserContacts method
+ */
+message GetUserContactsRequest {
+  string uid = 1;
+}
+
+message GetUserContactsResponse {
+  string code = 1;
+  string message = 2;
+  string uid = 5;
+  ContactInfo user_info = 3;
+  ContactInfoList user_contacts = 4;
+}
+
+/**
+ * UploadContacts method
+ */
+message UploadContactsRequest {
+  string uid = 1;
+  ContactInfoList contacts = 2;
+}
+
+message RegisteredUserContact {
+  string uid = 1;
+  ContactInfo contact = 2;
+}
+
+message UploadContactsResponse {
+  string code = 1;
+  string message = 2;
+  repeated RegisteredUserContact reg_contacts = 3;
+}

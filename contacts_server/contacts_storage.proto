@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package orangelab;
+
+message ContactInfo {
+  string phone_key = 1;
+  string name = 2;
+}
+
+message ContactInfoList {
+  repeated ContactInfo contacts = 1;
+}
+
+/*
+ ContactsDB schema:
+   Background: The levelDB does not support database schema - it is used as a key_value database. But we can still make a schema to the system using the ProtocolBuffer as the value and then the PB itself will be the schema for the database.
+   DB Schema:
+    <key>   --> uid
+    <value> --> ContactBook
+ */
+message ContactBook {
+  string uid = 1;
+  ContactInfo myself = 2;
+  ContactInfoList contacts = 3;
+}
+
+/*
+ PhoneIndexDB schema:
+    <key>   --> phone_key
+    <value> --> the user id who owns this phone_key.
+ */
+message ReverseUserId {
+  string uid = 1;
+}
+
+/*
+ ContactsIndexDB schema:
+    <key>   --> phone_key
+    <value> --> the user whose contacts have this phone_key.
+ */
+message ReverseContacts {
+  repeated string uids = 1;
+}
+

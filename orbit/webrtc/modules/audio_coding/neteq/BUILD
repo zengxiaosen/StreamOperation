@@ -1,0 +1,115 @@
+# BUILD file for webrtc audio_coding module -  OPUS codecs
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+  name = "neteq",
+  hdrs = [
+    "include/neteq.h",
+    "accelerate.h",
+    "audio_classifier.h",
+    "audio_decoder_impl.h",
+    "audio_multi_vector.h",
+    "audio_vector.h",
+    "background_noise.h",
+    "buffer_level_filter.h",
+    "comfort_noise.h",
+    "decision_logic.h",
+    "decision_logic_fax.h",
+    "decision_logic_normal.h",
+    "decoder_database.h",
+    "defines.h",
+    "delay_manager.h",
+    "delay_peak_detector.h",
+    "dsp_helper.h",
+    "dtmf_buffer.h",
+    "dtmf_tone_generator.h",
+    "expand.h",
+    "merge.h",
+    "nack.h",
+    "neteq_impl.h",
+    "normal.h",
+    "packet_buffer.h",
+    "payload_splitter.h",
+    "post_decode_vad.h",
+    "preemptive_expand.h",
+    "random_vector.h",
+    "rtcp.h",
+    "statistics_calculator.h",
+    "sync_buffer.h",
+    "time_stretch.h",
+    "timestamp_scaler.h",
+  ],
+  srcs = [
+    "accelerate.cc",
+    "audio_classifier.cc",
+    "audio_decoder_impl.cc",
+    "audio_multi_vector.cc",
+    "audio_vector.cc",
+    "background_noise.cc",
+    "buffer_level_filter.cc",
+    "comfort_noise.cc",
+    "decision_logic.cc",
+    "decision_logic_fax.cc",
+    "decision_logic_normal.cc",
+    "decoder_database.cc",
+    "delay_manager.cc",
+    "delay_peak_detector.cc",
+    "dsp_helper.cc",
+    "dtmf_buffer.cc",
+    "dtmf_tone_generator.cc",
+    "expand.cc",
+    "merge.cc",
+    "nack.cc",
+    "neteq.cc",
+    "neteq_impl.cc",
+    "normal.cc",
+    "packet_buffer.cc",
+    "payload_splitter.cc",
+    "post_decode_vad.cc",
+    "preemptive_expand.cc",
+    "random_vector.cc",
+    "rtcp.cc",
+    "statistics_calculator.cc",
+    "sync_buffer.cc",
+    "time_stretch.cc",
+    "timestamp_scaler.cc",
+  ],
+
+  defines = [ "WEBRTC_CODEC_OPUS", "NDEBUG"],
+  deps = [
+    "//stream_service/orbit/webrtc/modules/audio_coding/codecs:audio_decoder_interface",
+    "//stream_service/orbit/webrtc/modules/audio_coding:rent_a_codec",
+    "//stream_service/orbit/webrtc:webrtc_common",
+    "//stream_service/orbit/webrtc/common_audio:common_audio",
+    "//stream_service/orbit/webrtc/system_wrappers:system_wrappers",
+    "//stream_service/orbit/webrtc/modules/audio_coding/codecs/opus:opus"
+  ],
+)
+
+cc_test(
+  name = "nack_unittest",
+  srcs = [
+    "nack_unittest.cc",
+  ],
+  deps = [
+    ":neteq",
+    "//third_party/gtest:gtest_main",
+  ],
+)
+
+# The test is not working properly right now.
+#cc_test(
+#  name = "neteq_unittest",
+#  srcs = [
+#    "neteq_unittest.cc",
+#  ],
+#  deps = [
+#    ":neteq",
+#    "//stream_service/orbit/webrtc/modules/audio_coding/neteq/tools:neteq_unittest_tools",
+#    "//stream_service/orbit/webrtc/modules/audio_coding/codecs/pcm16b",
+#    "//stream_service/orbit/webrtc/test/testsupport:fileutils",
+#    "//third_party/gtest:gtest_main",
+#  ],
+#  defines = ["WEBRTC_CODEC_OPUS"],
+#)

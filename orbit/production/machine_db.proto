@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package orbit.machine;
+// NOTES:
+//  The text format of the MachineCollection are stored into a file
+//  The file is served as the machine_db containing the information of the host
+//  and the corresonding ip.
+//  The typical machine_db.pb.txt (the text format file) is:
+//   machines {
+//    hostname: "t1.intviu.cn"
+//    ip: "123.206.52.92"
+//   }
+//   machines {
+//      hostname: "t2.intviu.cn"
+//      ip: "123.206.50.146"
+//   }
+// The system administrator is responsible for updating the files with updating the hostname
+// And run the machine_db_updater to update the file with filling in the ips.
+//  Command line:
+//   bazel-bin/stream_service/orbit/production/machine_db_updater --logtostderr
+
+message Machine {
+  string hostname = 1;
+  string ip = 2;
+}
+
+message MachineCollection {
+  repeated Machine machines = 1;
+}

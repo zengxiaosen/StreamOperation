@@ -1,0 +1,44 @@
+machines {
+  hostname: "t0.intviu.cn"
+  ip: "123.206.49.238"
+}
+machines {
+  hostname: "t1.intviu.cn"
+  ip: "123.206.52.92"
+}
+machines {
+  hostname: "t2.intviu.cn"
+  ip: "123.206.50.146"
+}
+machines {
+  hostname: "t3.intviu.cn"
+  ip: "123.206.50.244"
+}
+machines {
+  hostname: "t4.intviu.cn"
+  ip: "123.206.49.217"
+}
+machines {
+  hostname: "tt1.intviu.cn"
+  ip: "123.206.75.187"
+}
+machines {
+  hostname: "tt2.intviu.cn"
+  ip: "123.206.54.31"
+}
+machines {
+  hostname: "tt3.intviu.cn"
+  ip: "123.206.21.50"
+}
+machines {
+  hostname: "tt4.intviu.cn"
+  ip: "123.206.84.43"
+}
+machines {
+  hostname: "tt5.intviu.cn"
+  ip: "123.206.84.95"
+}
+machines {
+  hostname: "screenshare.intviu.cn"
+  ip: "123.207.145.65"
+}

@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package orbit;
+
+enum StoredPacketType {
+  RTP_PACKET   = 0;
+  RTCP_PACKET  = 1;
+};
+
+enum StoredMediaType {
+  ANY = 0;
+  AUDIO = 1;
+  VIDEO = 2;
+  DATA = 3;
+  VIDEO_RTX = 4;
+};
+
+
+// The Stored RTP proto stores the captured RTP packets raw data
+// for replay.
+message StoredPacket {
+  // required - True if the packet is incoming w.r.t. the user logging the data
+  StoredPacketType packet_type = 1;
+
+  // required - the transport id of the packet
+  int32 transport_id = 7;
+
+  // required - the timestamp of the packet. (arrival time)
+  uint32 ts = 6;  // in ms
+
+  // optional - the NTP timestamp of the packet.
+  int64 remote_ntp_time_ms = 8; // in ms
+
+  // optional - the rtp timestamp in the packet header
+  int32 rtp_timestamp = 9;
+
+  // required
+  StoredMediaType type = 2;
+
+  // required - The size of the packet including both payload and header.
+  uint32 packet_length = 3;
+
+  // required - The size of the packet eader.
+  uint32 header_length = 4;
+
+  // required - The whole packet including both payload and RTP header.
+  bytes data = 5;
+}

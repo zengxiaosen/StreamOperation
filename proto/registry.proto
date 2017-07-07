@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package orbit.registry;
+
+import "stream_service/orbit/base/monitor/system_info.proto";
+
+/**
+ * The registry service definition.
+ * -----------------------------------------------------------------
+ * A top level service definition of a distributed registry server.
+ * -----------------------------------------------------------------
+ */
+service RegistryService {
+  rpc Register (RegisterRequest)
+     returns (RegisterResponse) {}
+  rpc GetServers (GetServersRequest) 
+     returns (GetServersResponse) {}
+/*  Implement in the future.
+  rpc Lookup (LookupRequest)
+     returns (LookupResponse) {}  
+  rpc Unregister (UnregisterRequest)
+     returns (UnregisterResponse) {}
+  rpc SendEvent (SendEventRequest)
+     returns (SendEventResponse) {}
+*/
+}
+
+message ServerInfo {
+  string name = 1;
+  string host = 2;
+  int32  port = 3;
+  int32  http_port = 4;
+}
+
+
+// The request message - use as a ping (or heart-beat message).
+message RegisterRequest {
+  ServerInfo server =  1;
+  // Optional: if we have the updated health status, we will send it
+  //  to the master.
+  health.HealthStatus status = 2;
+}
+
+// The response message
+message RegisterResponse {
+  enum Status {
+    OK = 0;
+    ERROR = 1;
+  };
+
+  Status status = 1;
+  int32 id = 2;
+  string message = 3;
+}
+
+// The request message
+message GetServersRequest {
+  int32 id = 1;
+}
+
+// The response message
+message GetServersResponse {
+  enum Status {
+    OK = 0;
+    ERROR = 1;
+  };
+  Status status = 1;
+  repeated ServerInfo servers = 2;
+}

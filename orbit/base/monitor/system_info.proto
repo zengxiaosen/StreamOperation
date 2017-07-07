@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package orbit.health;
+
+import "stream_service/orbit/base/monitor/network_traffic_stats.proto";
+
+message CpuAverageLoad {
+  int32  load_avg_1  = 1;
+  int32  load_avg_5  = 2;
+  int32  load_avg_15 = 3;
+  int32  nr_threads  = 4;
+}
+
+// The message encapsulates the system information including the cpu time, physical memory
+// usage and network usage that a system monitor will collect in realtime.
+message SystemStat {
+  // Total cpu numbers in the system.
+  int32 cpu_number = 1;
+  // Average cpu load.
+  CpuAverageLoad load = 2;
+  // Cpu usage.
+  double cpu_usage_percent = 3;
+
+  // Memory usage
+  int64 total_vm_size = 4;
+  int64 total_pm_size = 5;
+  int64 used_vm_size = 6;
+  int64 used_pm_size = 7;
+
+  // Disk and io usage (TO BE IMPLEMENTED)
+
+  // Network stats
+  NetworkTrafficStat network = 8;
+}
+
+message ProcessLevelStat {
+  double process_use_cpu_percent = 1;
+  int64 used_vm_process = 2;
+  int64 used_pm_process = 3;  
+  int32 thread_count = 4;
+}
+
+message HealthStatus {
+  int32 ts = 1;  // The snapshot of the system's timestamp. unit: ts
+  SystemStat system = 2;
+  ProcessLevelStat process = 3;
+}

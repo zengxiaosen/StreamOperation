@@ -1,0 +1,16 @@
+
+1.Start command 
+	bazel-bin/stream_service/orbit/server/orbit_stream_server --logtostderr --vmodule="webcast" --v=2 --use_plugin_name="video_mixer"
+2.Export dot files
+ 	(1).init dot dir
+ 		export GST_DEBUG_DUMP_DOT_DIR=/home/vellee/Develop/gst_dot
+ 	(2).Export pipeline to dot file
+ 		GST_DEBUG_BIN_TO_DOT_FILE(GST_BIN(pipeline_), GST_DEBUG_GRAPH_SHOW_VERBOSE, "dot_name");
+ 	(3).Export dot file to png file.(Enter dot folder @step (1))
+		dot -Tpng dot_name.dot > dot_name.png
+	(4).Open png file
+		eog dot_name.png
+3.Sample pipeline
+    gst-launch videotestsrc ! vp8enc ! rtpvp8pay ! rtpvp8depay ! vp8dec ! videoconvert ! videomixer ! tee ! autovideosink
+4.Add depended lists 
+  pkg-config --list-all|grep gst

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package orbit;
+
+// The message encapsulates the network statisical data for each network interface.
+message NetworkTrafficStat {
+  // The network interface name, e.g. wlan0, eth0, eth1
+  string interface = 1;
+  // Record the last time that we collect nic information.
+  int32 last_nic_collect_time = 2;
+  // The total in-bytes of the network interface
+  int64 last_bytein = 3;
+  // The total out-bytes of the network interface
+  int64 last_byteout = 4;
+  // The calculated in-bytes per second. unit: bytes/s
+  int32 inbytes_per_second = 5;
+  // The calculated out-bytes per second. unit: bytes/s
+  int32 outbytes_per_second = 6;
+  // The readable nic traffic status
+  string nic_readable_traffic = 7;
+};

@@ -1,0 +1,33 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+  name = "rtp_headers",
+  hdrs = [
+          "rtp_headers.h",
+         ],
+  deps = [
+          "//third_party/glog"
+         ],
+)
+
+cc_binary(
+  name = "test_priority_queue",
+  srcs = [
+    "test_priority_queue.cc"
+  ],
+  deps = [
+    "//third_party/glog",
+    "//third_party/gflags",
+  ],
+)
+
+cc_test(
+ name = "rtp_packet_queue_test",
+ srcs = [
+  "rtp_packet_queue_test.cc",
+ ],
+ deps = [
+   ":rtp_packet_queue",
+   "//third_party/gtest:gtest_main",
+ ],
+)

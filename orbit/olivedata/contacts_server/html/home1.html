@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Statusz/</title>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<style>
+  table{width:100%;border-spacing: 0;border-collapse: collapse;}
+  table th,table td{padding: 3px;}
+  table>tbody>tr>td, table>tbody>tr>th, table>tfoot>tr>td, table>tfoot>tr>th, table>thead>tr>td, table>thead>tr>th {border: 1px solid #000;}
+  table>thead>tr>td, table>thead>tr>th{background-color: green;color:#fff;font-weight: bold;}
+  table td{border:1px solid #000;}
+  h1{padding:6px 3px;}
+  .text-right{text-align: right;}
+  .titlebg{background-color: #eeeeff;}
+  .text-center{text-align: center;}
+  .panelbg{background-color: #aca3d0;}
+  .fieldset legend{cursor: pointer;color: blue;}
+  .fieldset legend:before{content:"-";font-weight: bold;margin:3px;}
+  .hiden legend:before{content:"+";}
+  .hiden.fieldset{border:0 none;}
+  .hiden.fieldset .form-content{display:none;}
+  .fl{float: left;}
+  .form-content {overflow: hidden;}
+</style>
+</head>
+<body>
+  <div>
+    <h1 class="text-center titlebg">proto buffer data test</h1>
+  </div>
+  <div>
+    <h1 class="panelbg">test data</h1>
+    <div>
+        <!-- form per interface start -->
+        <form action="/contact" method="post" class="J_form">
+          <fieldset class="J_fieldset fieldset hiden">
+            <legend class="J_legend">interfalce name</legend>
+            <div class="form-content">
+                <!-- form content -->
+                <div class="fl">
+                    <!-- field name and input -->
+                    First name:<input type="text" name="name" value="default value"><br>
+                    Last name:<input type="text" name="lastname" value="Mouse"><br>
+
+                    <input type="submit" value="check">
+                </div>
+                <!-- form result -->
+                <div class="fl" style="margin-left:12px;">
+                    <textarea class="J_result" style="display:none;"></textarea>
+                </div>
+            </div>
+          </fieldset>
+        </form>
+        <!-- form per interface end -->
+
+        <!-- form per interface start -->
+        <form action="/contact" method="post" class="J_form">
+          <fieldset class="J_fieldset fieldset hiden">
+            <legend class="J_legend">interfalce name</legend>
+            <div class="form-content">
+                <!-- form content -->
+                <div class="fl">
+                    <!-- field name and input -->
+                    First name:<input type="text" name="name" value="default value"><br>
+                    Last name:<input type="text" name="lastname" value="Mouse"><br>
+
+                    <input type="submit" value="check">
+                </div>
+                <!-- form result -->
+                <div class="fl" style="margin-left:12px;">
+                    <textarea class="J_result" style="display:none;"></textarea>
+                </div>
+            </div>
+          </fieldset>
+        </form>
+        <!-- form per interface end -->
+
+        <!-- form per interface start -->
+        <form action="/contact" method="post" class="J_form">
+          <fieldset class="J_fieldset fieldset hiden">
+            <legend class="J_legend">interfalce name</legend>
+            <div class="form-content">
+                <!-- form content -->
+                <div class="fl">
+                    <!-- field name and input -->
+                    First name:<input type="text" name="name" value="default value"><br>
+                    Last name:<input type="text" name="lastname" value="Mouse"><br>
+
+                    <input type="submit" value="check">
+                </div>
+                <!-- form result -->
+                <div class="fl" style="margin-left:12px;">
+                    <textarea class="J_result" style="display:none;"></textarea>
+                </div>
+            </div>
+          </fieldset>
+        </form>
+        <!-- form per interface end -->
+
+    </div>
+  </div>
+  <script>
+    $(document.body).on('click','.J_legend',function(e) {
+        var fieldset = $(this).parents('.J_fieldset');
+        if(fieldset[0]) {
+            if(fieldset.hasClass('hiden')) {
+                fieldset.removeClass('hiden');
+            } else {
+                fieldset.addClass('hiden');
+            }
+        }
+    });
+    $(document.body).on('submit','.J_form',function(e){
+        var form = $(this);
+        setTimeout(function(){
+            if(form[0]) {
+                var submitBtn = form.find('input[type=submit]');
+                var res = form.find('.J_result');
+                if(res[0]) {
+                    submitBtn.attr('disabled','disabled');
+                    res.text('loading...');
+                    res.show();
+                }
+                $.ajax({
+                    url:form.attr('action'),
+                    data:form.serialize(),
+                    type:form.attr('method'),
+                    cache:false,
+                    success:function(data) {
+                        res.text(data);
+                        submitBtn.removeAttr('disabled');
+                    },
+                    error : function(error) {
+                        submitBtn.removeAttr('disabled');
+                        res.text('failed');
+                    }
+                });
+            }
+        },0);
+        return false;
+    });
+  </script>
+</body>
+</html>

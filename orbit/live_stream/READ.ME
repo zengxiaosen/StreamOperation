@@ -1,0 +1,12 @@
+1.Export dot files
+ 	(1).init dot dir
+ 		export GST_DEBUG_DUMP_DOT_DIR=/home/vellee/Develop/gst_dot
+ 	(2).Export pipeline to dot file
+ 		GST_DEBUG_BIN_TO_DOT_FILE(GST_BIN(pipeline_), GST_DEBUG_GRAPH_SHOW_VERBOSE, "dot_name");
+ 	(3).Export dot file to png file.(Enter dot folder @step (1))
+		dot -Tpng dot_name.dot > dot_name.png
+	(4).Open png file
+		eog dot_name.png
+    (5).Demo live stream location
+       --rtmp://push.bj.bcelive.com/live/gcci91d98b20g6pkq9x 
+       HLS播放地址： http://liveservice.intviu.cn/lve-gccixr6wi514jm2d/live.m3u8?responseCacheControl=max-age%3D1

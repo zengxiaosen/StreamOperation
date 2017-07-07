@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package orbit;
+
+enum MemberType {
+  STUDENT   = 0;
+  TEACHER   = 1;
+};
+
+message CourseScore {
+  uint32 course_id = 1;
+  uint32 score = 2;
+};
+
+message StudentMember {
+  MemberType type = 1;
+  string name = 2;
+  string department = 3;
+  uint32 age = 4;
+  repeated CourseScore scores = 5;
+};

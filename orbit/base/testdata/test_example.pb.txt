@@ -1,0 +1,11 @@
+name: "xucheng"
+department: "computer science"
+age: 25
+scores {
+  course_id: 123
+  score: 90
+}
+scores {
+  course_id: 235
+  score: 85
+}
